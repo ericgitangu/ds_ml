@@ -47,28 +47,28 @@ A distilled, interview-ready reference covering eight core domains:
 
 ## Interactive Assessment (`ml_engineer_prep_full.html`)
 
-A self-contained HTML app with **59 practice questions**, a built-in timer, and instant feedback. Open in any browser -- no server required.
+A self-contained HTML app with **75 practice questions**, a built-in timer, and instant feedback. Open in any browser -- no server required.
 
 ### Question Breakdown
 
 | Category | Questions | Types | Difficulty |
 |----------|-----------|-------|------------|
-| **Python** | 7 | Coding + MCQ | Easy - Hard |
+| **Python** | 8 | Coding + MCQ | Easy - Hard |
+| **ML / Statistics** | 10 | MCQ | Easy - Hard |
+| **Deep Learning** | 8 | MCQ | Easy - Hard |
+| **SQL** | 6 | Coding + MCQ | Easy - Hard |
+| **Deployment / MLOps** | 5 | MCQ | Easy - Hard |
+| **Probability** | 4 | MCQ | Easy - Hard |
+| **Feature Engineering** | 4 | MCQ | Easy - Hard |
+| **Pandas** | 4 | MCQ | Easy - Hard |
+| **NLP** | 4 | MCQ | Easy - Hard |
+| **Computer Vision** | 3 | MCQ | Medium - Hard |
+| **scikit-learn** | 3 | MCQ | Easy - Hard |
+| **NumPy** | 3 | MCQ | Medium - Hard |
 | **Sorting** | 3 | Coding + MCQ | Medium |
 | **Graphs** | 3 | Coding + MCQ | Medium |
 | **Dynamic Programming** | 3 | Coding | Easy - Hard |
 | **Data Structures** | 3 | MCQ | Easy - Medium |
-| **SQL** | 6 | Coding + MCQ | Easy - Hard |
-| **ML / Statistics** | 10 | MCQ | Easy - Hard |
-| **Deep Learning** | 6 | MCQ | Medium - Hard |
-| **NLP** | 3 | MCQ | Medium - Hard |
-| **Computer Vision** | 2 | MCQ | Medium |
-| **Feature Engineering** | 2 | MCQ | Medium |
-| **Deployment / MLOps** | 2 | MCQ | Medium |
-| **Probability** | 2 | MCQ | Medium |
-| **Pandas** | 4 | MCQ | Easy - Hard |
-| **NumPy** | 2 | MCQ | Medium |
-| **scikit-learn** | 2 | MCQ | Medium - Hard |
 
 ### Features
 

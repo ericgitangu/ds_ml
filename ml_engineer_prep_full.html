@@ -523,6 +523,89 @@ const Q=[
  opts:['Returns and terminates','Returns a value and pauses, resuming on next()','Raises exception','Creates decorator'],
  ans:1,explain:'Makes function a generator — produces values lazily. Memory efficient for large datasets: <code>for x in my_gen(): ...</code> processes one item at a time.',
  wrongExplains:['return terminates; yield pauses.','Not exception-related.','Decorators use @syntax.'],ref:'Python'},
+
+// --- 14 Additional Questions (75 total) ---
+
+// Deployment/MLOps (+3)
+{type:'mc',cat:'Deployment',tag:'interview',diff:'Hard',
+ q:'Your model\'s prediction distribution has shifted significantly from training, but accuracy on labeled samples remains high. What is likely happening?',
+ opts:['Data drift without concept drift','Concept drift','Model overfitting','Feature store failure'],
+ ans:0,explain:'Data drift means input distribution changed, but the learned relationship (concept) still holds. Accuracy stays high because the model generalizes well to the new distribution. Concept drift would cause accuracy to drop.',
+ wrongExplains:['Concept drift implies the target relationship changed — accuracy would degrade.','Overfitting would show train/test gap, not production distribution shift.','Feature store failure would cause missing features and errors, not distribution shift.'],ref:'Deployment'},
+{type:'mc',cat:'Deployment',tag:'interview',diff:'Medium',
+ q:'What is a shadow deployment (dark launch) in ML?',
+ opts:['Deploying a model without monitoring','Running a new model in parallel with production, logging predictions but not serving them to users','Deploying only at night during low traffic','A/B testing with 50/50 split'],
+ ans:1,explain:'Shadow deployment runs the candidate model alongside the champion. Both receive live traffic, but only the champion\'s predictions are served. The shadow model\'s predictions are logged for offline comparison — zero user risk.',
+ wrongExplains:['Monitoring is always required.','Timing is irrelevant to the deployment pattern.','A/B testing serves both models to users; shadow does not.'],ref:'Deployment'},
+{type:'mc',cat:'Deployment',tag:'interview',diff:'Easy',
+ q:'Which file is essential for containerizing an ML model for deployment?',
+ opts:['requirements.txt','Dockerfile','model.pkl','config.yaml'],
+ ans:1,explain:'A Dockerfile defines the container image — base image, dependencies, model artifacts, and entrypoint. requirements.txt lists Python deps but isn\'t sufficient alone. The Dockerfile references requirements.txt and model files.',
+ wrongExplains:['Lists dependencies but doesn\'t define the container.','The model artifact goes inside the container, but you need a Dockerfile to build it.','Config is optional and varies by framework.'],ref:'Deployment'},
+
+// Feature Engineering (+2)
+{type:'mc',cat:'FeatureEng',tag:'coderbyte',diff:'Hard',
+ q:'You have a categorical feature with 10,000 unique values (e.g., zip codes). Which encoding strategy is most appropriate?',
+ opts:['One-hot encoding','Label encoding','Target encoding with cross-validation','Binary encoding'],
+ ans:2,explain:'Target encoding replaces each category with the mean of the target variable. With 10K categories, one-hot creates a sparse 10K-column matrix. Target encoding produces 1 column. Use k-fold CV to prevent target leakage — encode each fold using statistics from the other folds.',
+ wrongExplains:['Creates 10K sparse columns — memory explosion and overfitting risk.','Imposes arbitrary ordinal relationship between zip codes.','Better than one-hot (log2(10000)~14 columns) but loses target signal that target encoding captures.'],ref:'FeatureEng'},
+{type:'mc',cat:'FeatureEng',tag:'coderbyte',diff:'Easy',
+ q:'Why should you fit a scaler on the training set only, then transform both train and test?',
+ opts:['It\'s faster','To prevent data leakage — test statistics would leak future information into training','The test set is too small to compute statistics','Scalers only work on training data'],
+ ans:1,explain:'If you fit on the full dataset, the scaler\'s mean/std includes test data information. During cross-validation or production, you won\'t have access to future data. Always: fit on train, transform on train+test.',
+ wrongExplains:['Speed is not the reason.','Test set size is irrelevant to the principle.','Scalers work on any data — the issue is information leakage.'],ref:'FeatureEng'},
+
+// Deep Learning / Transformers (+2)
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Hard',
+ q:'In the Transformer architecture, why is the attention score divided by sqrt(d_k)?',
+ opts:['To normalize output to [0,1]','To prevent dot products from growing too large, which pushes softmax into regions with tiny gradients','To reduce computation cost','To handle variable-length sequences'],
+ ans:1,explain:'For large d_k, dot products grow in magnitude, pushing softmax outputs toward 0 or 1 (saturation). This creates vanishing gradients. Dividing by sqrt(d_k) keeps the variance of dot products at ~1, maintaining useful gradient flow through softmax.',
+ wrongExplains:['Softmax already normalizes to [0,1] — scaling prevents gradient issues, not range issues.','Division is cheap — this is about numerical stability.','Masking handles variable lengths, not scaling.'],ref:'DeepLearning'},
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Easy',
+ q:'What is transfer learning?',
+ opts:['Training a model from scratch on new data','Using a pre-trained model\'s learned features as a starting point for a new task','Transferring data between databases','Copying model weights to a different framework'],
+ ans:1,explain:'Transfer learning reuses a model trained on a large dataset (e.g., ImageNet, BERT on web text) for a new task. Freeze early layers (general features), fine-tune later layers (task-specific). Dramatically reduces data and compute requirements.',
+ wrongExplains:['That\'s training from scratch — the opposite of transfer learning.','Data transfer is unrelated.','Framework conversion is model porting, not transfer learning.'],ref:'DeepLearning'},
+
+// Probability (+2)
+{type:'mc',cat:'Probability',tag:'coderbyte',diff:'Hard',
+ q:'You flip a fair coin until you get heads. What is the expected number of flips?',
+ opts:['1','1.5','2','infinity'],
+ ans:2,explain:'This is a geometric distribution with p=0.5. E[X] = 1/p = 1/0.5 = 2. Intuition: P(1 flip)=0.5, P(2 flips)=0.25, P(3 flips)=0.125... The series 1*0.5 + 2*0.25 + 3*0.125 + ... = 2.',
+ wrongExplains:['That would mean you always get heads on the first flip.','Not a standard geometric distribution result.','The series converges — each additional flip is exponentially less likely.'],ref:'Probability'},
+{type:'mc',cat:'Probability',tag:'coderbyte',diff:'Easy',
+ q:'Two events A and B are independent. P(A)=0.3, P(B)=0.4. What is P(A and B)?',
+ opts:['0.7','0.12','0.1','0.3'],
+ ans:1,explain:'For independent events: P(A and B) = P(A) * P(B) = 0.3 * 0.4 = 0.12. Independence means knowing A occurred doesn\'t change the probability of B.',
+ wrongExplains:['0.7 is P(A) + P(B) — that\'s closer to P(A or B) for mutually exclusive events.','No basis for this value.','That\'s just P(A) — ignores B entirely.'],ref:'Probability'},
+
+// Computer Vision (+1)
+{type:'mc',cat:'ComputerVision',tag:'interview',diff:'Hard',
+ q:'What is the key advantage of ResNet\'s skip connections (residual connections)?',
+ opts:['Faster inference','Enables training very deep networks by mitigating vanishing gradients','Reduces model size','Removes the need for batch normalization'],
+ ans:1,explain:'Skip connections let gradients flow directly through shortcut paths during backpropagation, bypassing stacked layers. The network learns residual mappings F(x) = H(x) - x instead of direct mappings H(x). This makes it easier to train 100+ layer networks without gradient degradation.',
+ wrongExplains:['Skip connections add computation; the benefit is trainability.','More connections means more parameters, not fewer.','ResNet still uses batch norm — skip connections complement it.'],ref:'ComputerVision'},
+
+// Sklearn (+1)
+{type:'mc',cat:'Sklearn',tag:'coderbyte',diff:'Easy',
+ q:'What does <code>GridSearchCV(estimator, param_grid, cv=5)</code> do?',
+ opts:['Trains 5 separate models','Exhaustively searches all parameter combinations using 5-fold cross-validation','Randomly samples 5 parameter combinations','Splits data into 5 train/test sets without tuning'],
+ ans:1,explain:'GridSearchCV tries every combination in param_grid. For each combination, it runs 5-fold CV (train on 4 folds, validate on 1, rotate). Total fits = combinations * 5. Returns best_params_ and best_score_. Use RandomizedSearchCV for large search spaces.',
+ wrongExplains:['It trains many more — every combo * 5 folds.','That\'s RandomizedSearchCV with n_iter=5.','KFold alone does splitting; GridSearchCV also tunes hyperparameters.'],ref:'Sklearn'},
+
+// NumPy (+1)
+{type:'mc',cat:'NumPy',tag:'coderbyte',diff:'Hard',
+ q:'What is the output of <code>np.array([1,2,3]) @ np.array([4,5,6])</code>?',
+ opts:['[4, 10, 18]','32','[[4,5,6],[8,10,12],[12,15,18]]','Error'],
+ ans:1,explain:'The @ operator performs matrix multiplication. For two 1-D arrays, it computes the dot product: 1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32. Element-wise multiplication would be np.array([1,2,3]) * np.array([4,5,6]) = [4,10,18].',
+ wrongExplains:['That\'s element-wise multiplication (*), not matrix multiply (@).','That\'s an outer product — np.outer(a,b).','Both arrays are compatible shapes for dot product.'],ref:'NumPy'},
+
+// NLP (+1)
+{type:'mc',cat:'NLP',tag:'interview',diff:'Easy',
+ q:'What is the difference between stemming and lemmatization?',
+ opts:['They are identical','Stemming chops word endings heuristically; lemmatization uses vocabulary and morphological analysis to return valid base forms','Lemmatization is faster','Stemming is more accurate'],
+ ans:1,explain:'Stemming (Porter, Snowball) applies rules like removing "-ing", "-ed" — fast but crude ("studies" -> "studi"). Lemmatization uses a dictionary to find the true root ("studies" -> "study", "better" -> "good"). Lemmatization is slower but produces real words.',
+ wrongExplains:['Stemming is cruder and often produces non-words.','Lemmatization is slower due to dictionary lookup.','Lemmatization is more accurate — it returns real words.'],ref:'NLP'},
 ];
 
 // =============================================
