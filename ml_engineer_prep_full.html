@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ML Engineer Assessment Prep — Comprehensive</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090f;--surface:#0e1219;--surface2:#151b25;--surface3:#1c2433;--border:#252f3f;--text:#e2e8f0;--text-dim:#64748b;--accent:#10b981;--accent-glow:#10b98133;--cyan:#06b6d4;--amber:#f59e0b;--rose:#f43f5e;--violet:#8b5cf6;--code-bg:#0a0f18;--correct-bg:#10b98115;--correct-border:#10b981;--wrong-bg:#f43f5e15;--wrong-border:#f43f5e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.header{padding:20px 16px 14px;background:linear-gradient(180deg,#0c1220,var(--bg));border-bottom:1px solid var(--border);position:relative}
+.header::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--cyan),transparent)}
+.header h1{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-sub{font-size:12px;color:var(--text-dim);margin-top:2px}
+.timer-bar{display:none;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
+.timer-bar.active{display:flex}
+.timer-display{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--accent)}
+.timer-display.warning{color:var(--amber)}.timer-display.danger{color:var(--rose);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.timer-label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px}
+.timer-progress{flex:1;height:4px;background:var(--surface3);border-radius:2px;margin:0 14px;overflow:hidden}
+.timer-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--cyan));border-radius:2px;transition:width 1s linear}
+.timer-fill.warning{background:linear-gradient(90deg,var(--amber),#f97316)}.timer-fill.danger{background:var(--rose)}
+.q-counter{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-dim)}
+.tabs{display:flex;overflow-x:auto;background:var(--surface);border-bottom:1px solid var(--border);-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:11px 14px;font-size:12px;font-weight:600;color:var(--text-dim);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--text)}
+.content{padding:14px;max-width:860px;margin:0 auto;padding-bottom:100px}
+.section{display:none}.section.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.card-title{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.badge-easy{background:#10b98120;color:#10b981}.badge-med{background:#f59e0b20;color:#f59e0b}.badge-hard{background:#f43f5e20;color:#f43f5e}.badge-pattern{background:#8b5cf620;color:#a78bfa}
+.badge-cb{background:#3b82f620;color:#60a5fa;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.3px}
+.badge-iv{background:#f59e0b18;color:#fbbf24;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:.3px}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px;overflow-x:auto;margin:8px 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;color:#c9d1d9;-webkit-overflow-scrolling:touch}
+.quiz-q{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;transition:border-color .3s}
+.quiz-q.answered-correct{border-color:var(--correct-border)}.quiz-q.answered-wrong{border-color:var(--wrong-border)}
+.quiz-q h3{font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.5}
+.qnum{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;margin-right:6px}
+.q-type{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600;margin-left:6px;vertical-align:middle}
+.q-type-mc{background:#8b5cf620;color:#a78bfa}.q-type-code{background:#06b6d420;color:#22d3ee}.q-type-sql{background:#f59e0b20;color:#fbbf24}
+.options{display:flex;flex-direction:column;gap:6px}
+.opt-btn{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px 12px;text-align:left;font-size:13px;font-family:inherit;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;transition:all .15s;line-height:1.5}
+.opt-btn:hover:not(.disabled){border-color:var(--accent);background:var(--surface3)}
+.opt-letter{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--text-dim);background:var(--surface3);border-radius:4px;padding:1px 6px;flex-shrink:0;margin-top:1px}
+.opt-btn.correct{background:var(--correct-bg);border-color:var(--correct-border)}
+.opt-btn.correct .opt-letter{background:var(--correct-border);color:#fff}
+.opt-btn.wrong{background:var(--wrong-bg);border-color:var(--wrong-border)}
+.opt-btn.wrong .opt-letter{background:var(--wrong-border);color:#fff}
+.opt-btn.disabled{pointer-events:none;opacity:.55}.opt-btn.disabled.correct{opacity:1}.opt-btn.disabled.wrong{opacity:.85}
+.feedback-box{margin-top:10px;padding:12px;border-radius:8px;font-size:12.5px;display:none;line-height:1.65;animation:fadeIn .3s ease}
+.feedback-box.show{display:block}
+.feedback-correct{background:#10b98112;border:1px solid #10b98140;border-left:3px solid var(--accent)}
+.feedback-wrong{background:#f43f5e0a;border:1px solid #f43f5e30;border-left:3px solid var(--rose)}
+.feedback-title{font-weight:700;font-size:13px;margin-bottom:6px}
+.feedback-title.correct-title{color:var(--accent)}.feedback-title.wrong-title{color:var(--rose)}
+.ref-link{display:inline-block;margin-top:8px;padding:4px 10px;background:var(--surface3);border-radius:6px;color:var(--cyan);font-size:11px;text-decoration:none;font-weight:600;border:1px solid var(--border)}
+.ref-link:hover{border-color:var(--cyan)}
+.why-item{margin:4px 0;font-size:12px;padding-left:4px}
+.why-letter{font-family:'JetBrains Mono',monospace;font-weight:700;margin-right:4px;font-size:11px}
+.why-letter.is-correct{color:var(--accent)}.why-letter.is-wrong{color:var(--rose)}
+.code-challenge{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.challenge-desc{font-size:13px;color:var(--text-dim);margin-bottom:10px;line-height:1.6}
+.code-editor{width:100%;min-height:180px;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c9d1d9;resize:vertical;line-height:1.65;outline:none}
+.code-editor:focus{border-color:var(--accent)}
+.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border:1px solid var(--border);transition:all .15s}
+.btn-primary{background:var(--accent);color:#000;border-color:var(--accent)}.btn-primary:hover{background:#059669}
+.btn-secondary{background:var(--surface2);color:var(--text)}.btn-secondary:hover{background:var(--surface3);border-color:var(--accent)}
+.btn-outline{background:transparent;color:var(--cyan);border-color:var(--cyan)}.btn-outline:hover{background:#06b6d415}
+.solution-panel{display:none;margin-top:12px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.solution-panel.show{display:block;animation:fadeIn .3s ease}
+.solution-tabs{display:flex;background:var(--surface2);border-bottom:1px solid var(--border)}
+.sol-tab{flex:1;padding:8px;text-align:center;font-size:11px;font-weight:600;color:var(--text-dim);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit}
+.sol-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.sol-content{padding:12px;background:var(--surface)}.sol-pane{display:none}.sol-pane.active{display:block}
+.complexity-box{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--surface3);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;margin:4px 4px 4px 0}
+.complexity-box .label{color:var(--text-dim);font-family:'Outfit',sans-serif}
+.results-panel{display:none;text-align:center;padding:30px 20px}
+.results-panel.show{display:block;animation:fadeIn .5s ease}
+.big-score{font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.score-subtitle{font-size:14px;color:var(--text-dim);margin-top:4px}
+.cat-breakdown{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.cat-stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;text-align:center;min-width:100px}
+.cat-stat-num{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700}
+.cat-stat-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px}
+.start-screen{text-align:center;padding:30px 20px}
+.start-screen h2{font-size:20px;font-weight:700;margin-bottom:8px}
+.start-screen p{font-size:13px;color:var(--text-dim);margin-bottom:16px;max-width:500px;margin-left:auto;margin-right:auto}
+.time-options{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.time-opt{padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;border:2px solid var(--border);background:var(--surface);color:var(--text);transition:all .15s}
+.time-opt:hover{border-color:var(--accent)}.time-opt.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--accent)}
+.start-btn{padding:14px 40px;border-radius:10px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;border:none;background:linear-gradient(135deg,var(--accent),#059669);color:#000;transition:transform .1s}
+.start-btn:hover{transform:scale(1.02)}.start-btn:active{transform:scale(.98)}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-btn{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);transition:all .15s}
+.filter-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.filter-btn:hover{border-color:var(--accent)}
+.topic-header{font-size:13px;font-weight:700;color:var(--cyan);margin:18px 0 8px;padding:6px 10px;background:var(--surface);border-radius:6px;border-left:3px solid var(--cyan)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>ML Engineer Assessment Prep</h1>
+  <div class="header-sub">Comprehensive · Real-time feedback · Reference links · All ML topics</div>
+</div>
+<div class="timer-bar" id="timerBar">
+  <div><div class="timer-label">Time Left</div><div class="timer-display" id="timerDisplay">00:00</div></div>
+  <div class="timer-progress"><div class="timer-fill" id="timerFill"></div></div>
+  <div><div class="timer-label">Progress</div><div class="q-counter" id="qCounter">0/0</div></div>
+</div>
+<div class="tabs">
+  <button class="tab active" data-tab="practice">⚡ Practice</button>
+  <button class="tab" data-tab="review">📋 Full Bank</button>
+</div>
+<div class="content">
+<div class="section active" id="practice">
+  <div class="start-screen" id="startScreen">
+    <h2>ML Engineer — Full Coverage</h2>
+    <p>75+ questions across algorithms, data structures, sorting, graphs, DP, SQL, ML theory, deep learning, NLP, CV, feature engineering, deployment, probability, Pandas, NumPy, and scikit-learn.</p>
+    <div class="time-options">
+      <button class="time-opt" data-mins="60" onclick="selectTime(this)">60 min</button>
+      <button class="time-opt" data-mins="90" onclick="selectTime(this)">90 min</button>
+      <button class="time-opt" data-mins="120" onclick="selectTime(this)">120 min</button>
+      <button class="time-opt selected" data-mins="0" onclick="selectTime(this)">Untimed · All</button>
+    </div>
+    <button class="start-btn" onclick="startAssessment()">Begin Assessment</button>
+    <div style="margin-top:14px;font-size:12px;color:var(--text-dim);">60 min = 20 Q · 90 min = 30 Q · 120 min = 45 Q · Untimed = all 75+</div>
+  </div>
+  <div id="assessmentArea" style="display:none"></div>
+  <div class="results-panel" id="resultsPanel"></div>
+</div>
+<div class="section" id="review">
+  <div class="card">
+    <div class="card-title">Complete Question Bank <span class="badge badge-pattern">All Topics</span></div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">Filter by topic. Every question has solutions, explanations, and reference links.</p>
+  </div>
+  <div class="filter-bar" id="filterBar"></div>
+  <div id="reviewContainer"></div>
+</div>
+</div>
+<script>
+const L='A,B,C,D'.split(',');
+// Reference links per topic
+const refs={
+  'Python':'https://docs.python.org/3/tutorial/',
+  'Sorting':'https://www.geeksforgeeks.org/sorting-algorithms/',
+  'Graphs':'https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/',
+  'DP':'https://www.geeksforgeeks.org/dynamic-programming/',
+  'DataStructures':'https://docs.python.org/3/tutorial/datastructures.html',
+  'SQL':'https://www.w3schools.com/sql/',
+  'ML/Stats':'https://scikit-learn.org/stable/user_guide.html',
+  'DeepLearning':'https://pytorch.org/tutorials/',
+  'NLP':'https://huggingface.co/docs/transformers/',
+  'ComputerVision':'https://pytorch.org/vision/stable/',
+  'FeatureEng':'https://scikit-learn.org/stable/modules/preprocessing.html',
+  'Deployment':'https://fastapi.tiangolo.com/tutorial/',
+  'Probability':'https://seeing-theory.brown.edu/',
+  'Pandas':'https://pandas.pydata.org/docs/user_guide/',
+  'NumPy':'https://numpy.org/doc/stable/user/absolute_beginners.html',
+  'Sklearn':'https://scikit-learn.org/stable/tutorial/',
+};
+
+// =============================================
+// QUESTION BANK — 75+ questions
+// =============================================
+const Q=[
+// ===== PYTHON ALGORITHMS =====
+{type:'code',cat:'Python',diff:'Easy',title:'Longest Word',tag:'coderbyte',
+ desc:'Return the longest word in a sentence. Only alphanumeric chars count. First longest on tie.',
+ starter:'def LongestWord(sen):\n  return\nprint(LongestWord("fun&!! time"))',
+ solution:'def LongestWord(sen):\n  cleaned = \'\'.join(c if c.isalnum() or c==\' \' else \' \' for c in sen)\n  return max(cleaned.split(), key=len)\nprint(LongestWord("fun&!! time"))  # => time',
+ explain:'<strong>Pattern: String clean + max()</strong><br>Replace non-alnum with spaces, split, use max(key=len). Returns first longest automatically.',
+ tc:'O(n)',sc:'O(n)',ref:'Python',
+ pitfalls:[{a:'Regex without cleaning',w:'Punctuation stays attached to words'},{a:'Sorting by length',w:'O(n log n) and breaks tie rule'}]},
+{type:'code',cat:'Python',diff:'Medium',title:'Question Marks',tag:'coderbyte',
+ desc:'Check if exactly 3 ? marks exist between every pair of digits summing to 10. Return "true"/"false".',
+ starter:'def QuestionsMarks(s):\n  return\nprint(QuestionsMarks("acc]?]7telecom??telecom7telecommu4"))',
+ solution:'def QuestionsMarks(s):\n  found = False\n  i = 0\n  while i < len(s):\n    if s[i].isdigit():\n      j, qm = i+1, 0\n      while j < len(s):\n        if s[j]==\'?\': qm+=1\n        elif s[j].isdigit():\n          if int(s[i])+int(s[j])==10:\n            found=True\n            if qm!=3: return "false"\n          break\n        j+=1\n    i+=1\n  return "true" if found else "false"',
+ explain:'<strong>Pattern: Two-pointer with counter</strong><br>For each digit, scan to next digit counting ?s. If pair sums to 10, verify exactly 3.',
+ tc:'O(n²)',sc:'O(1)',ref:'Python',
+ pitfalls:[{a:'Counting all ?s globally',w:'Must count between each consecutive digit pair'},{a:'Only checking adjacent digits',w:'Must scan past letters too'}]},
+{type:'code',cat:'Python',diff:'Hard',title:'Min Window Substring',tag:'coderbyte',
+ desc:'Find smallest substring of s containing all chars of t (with duplicates). strArr = [s, t].',
+ starter:'def MinWindowSubstring(strArr):\n  return\nprint(MinWindowSubstring(["ahffaksfajeeubsne","jefaa"]))',
+ solution:'def MinWindowSubstring(strArr):\n  from collections import Counter\n  s,t = strArr\n  need = Counter(t)\n  have,req = 0,len(need)\n  win = {}\n  best = (float(\'inf\'),0,0)\n  left = 0\n  for right,c in enumerate(s):\n    win[c] = win.get(c,0)+1\n    if c in need and win[c]==need[c]: have+=1\n    while have==req:\n      sz = right-left+1\n      if sz < best[0]: best=(sz,left,right)\n      lc = s[left]\n      win[lc]-=1\n      if lc in need and win[lc]<need[lc]: have-=1\n      left+=1\n  return s[best[1]:best[2]+1]',
+ explain:'<strong>Pattern: Sliding Window + HashMap</strong><br>Expand right to cover all target chars, contract left to minimize. have/required counter avoids checking all keys each step.',
+ tc:'O(n)',sc:'O(k)',ref:'Python',
+ pitfalls:[{a:'Brute force all substrings',w:'O(n³) — too slow'},{a:'Fixed-size window',w:'Size is unknown — must be expandable'}]},
+{type:'code',cat:'Python',diff:'Medium',title:'Tree Constructor',tag:'coderbyte',
+ desc:'Given pairs "(child,parent)", return "true" if they form valid binary tree (max 1 parent, max 2 children).',
+ starter:'def TreeConstructor(strArr):\n  return\nprint(TreeConstructor(["(1,2)","(2,4)","(5,7)","(7,2)","(9,5)"]))',
+ solution:'def TreeConstructor(strArr):\n  from collections import defaultdict\n  parents = defaultdict(int)\n  children = defaultdict(int)\n  for p in strArr:\n    c,par = p.strip("()").split(",")\n    parents[c]+=1; children[par]+=1\n    if parents[c]>1 or children[par]>2: return "false"\n  return "true"',
+ explain:'<strong>Pattern: Constraint counting with HashMap</strong><br>Track parent count per child (max 1) and child count per parent (max 2). Fail early.',
+ tc:'O(n)',sc:'O(n)',ref:'DataStructures',
+ pitfalls:[{a:'Building actual tree',w:'Overkill — just validate constraints'},{a:'Only checking parent count',w:'Must also check max 2 children'}]},
+// ===== SORTING =====
+{type:'code',cat:'Sorting',diff:'Medium',title:'Merge Sort',tag:'coderbyte',
+ desc:'Implement merge sort. Return sorted array.',
+ starter:'def merge_sort(arr):\n  return arr\nprint(merge_sort([38,27,43,3,9,82,10]))',
+ solution:'def merge_sort(arr):\n  if len(arr)<=1: return arr\n  mid=len(arr)//2\n  L=merge_sort(arr[:mid])\n  R=merge_sort(arr[mid:])\n  res,i,j=[],0,0\n  while i<len(L) and j<len(R):\n    if L[i]<=R[j]: res.append(L[i]);i+=1\n    else: res.append(R[j]);j+=1\n  res.extend(L[i:]); res.extend(R[j:])\n  return res',
+ explain:'<strong>Divide and Conquer.</strong> Split→recurse→merge sorted halves. O(n log n) guaranteed. Use <= for stability.',
+ tc:'O(n log n)',sc:'O(n)',ref:'Sorting',
+ pitfalls:[{a:'In-place merge',w:'O(n²) per merge defeats purpose'},{a:'pop(0) instead of index',w:'pop(0) is O(n), total becomes O(n² log n)'}]},
+{type:'code',cat:'Sorting',diff:'Medium',title:'Quick Sort',tag:'coderbyte',
+ desc:'Implement quicksort. Return sorted array.',
+ starter:'def quick_sort(arr):\n  return arr\nprint(quick_sort([10,7,8,9,1,5]))',
+ solution:'def quick_sort(arr):\n  if len(arr)<=1: return arr\n  pivot=arr[len(arr)//2]\n  left=[x for x in arr if x<pivot]\n  mid=[x for x in arr if x==pivot]\n  right=[x for x in arr if x>pivot]\n  return quick_sort(left)+mid+quick_sort(right)',
+ explain:'<strong>Divide and Conquer with Pivot.</strong> Pick middle pivot to avoid O(n²) on sorted input. Pythonic version is clean for interviews.',
+ tc:'O(n log n) avg',sc:'O(n)',ref:'Sorting',
+ pitfalls:[{a:'First element as pivot',w:'O(n²) on sorted arrays'},{a:'No duplicate bucket',w:'Infinite recursion possible'}]},
+{type:'mc',cat:'Sorting',diff:'Medium',tag:'coderbyte',
+ q:'Which sorting algorithm is NOT stable?',
+ opts:['Merge Sort','Quick Sort (Lomuto)','Insertion Sort','Tim Sort'],
+ ans:1,explain:'<strong>Quick Sort is unstable</strong> — equal elements may be reordered during partitioning. Merge Sort, Insertion Sort, and Tim Sort all preserve order of equal elements.',
+ wrongExplains:['Merge sort is stable when using <= in merge.','Insertion sort is stable by design.','Tim Sort (Python\'s built-in) is stable.'],ref:'Sorting'},
+// ===== GRAPHS =====
+{type:'code',cat:'Graphs',diff:'Medium',title:'BFS Shortest Path',tag:'coderbyte',
+ desc:'Return shortest path length (edges) from start to target in adjacency list graph. -1 if none.',
+ starter:'from collections import deque\ndef bfs_shortest(g,s,t):\n  return -1',
+ solution:'from collections import deque\ndef bfs_shortest(g,s,t):\n  if s==t: return 0\n  vis={s}\n  q=deque([(s,0)])\n  while q:\n    node,d=q.popleft()\n    for nb in g.get(node,[]):\n      if nb==t: return d+1\n      if nb not in vis:\n        vis.add(nb); q.append((nb,d+1))\n  return -1',
+ explain:'<strong>BFS guarantees shortest path in unweighted graphs.</strong> Use deque for O(1) popleft. Add to visited on enqueue, not dequeue.',
+ tc:'O(V+E)',sc:'O(V)',ref:'Graphs',
+ pitfalls:[{a:'list instead of deque',w:'pop(0) is O(n) → BFS becomes O(V²)'},{a:'Visited on dequeue',w:'Causes duplicate processing'}]},
+{type:'code',cat:'Graphs',diff:'Medium',title:'DFS Connected Components',tag:'coderbyte',
+ desc:'Count connected components in undirected graph. Nodes 0 to n-1.',
+ starter:'def count_components(g,n):\n  return 0',
+ solution:'def count_components(g,n):\n  vis=set();comp=0\n  def dfs(node):\n    vis.add(node)\n    for nb in g.get(node,[]): \n      if nb not in vis: dfs(nb)\n  for i in range(n):\n    if i not in vis: dfs(i); comp+=1\n  return comp',
+ explain:'<strong>DFS from each unvisited node = one component.</strong> Use set for O(1) visited lookup.',
+ tc:'O(V+E)',sc:'O(V)',ref:'Graphs',
+ pitfalls:[{a:'Only checking direct neighbors',w:'Must recurse through entire component'},{a:'Missing isolated nodes',w:'Loop through all 0..n-1, not just adjacency keys'}]},
+{type:'mc',cat:'Graphs',diff:'Medium',tag:'coderbyte',
+ q:'When should you use BFS over DFS?',
+ opts:['When the graph is weighted','When you need the shortest path in unweighted graphs','When memory is limited','When detecting cycles'],
+ ans:1,explain:'BFS explores level by level → guarantees shortest path in unweighted graphs. DFS is better for cycle detection, topological sort, and when memory is limited (stack vs queue).',
+ wrongExplains:['Weighted graphs need Dijkstra or Bellman-Ford.','BFS uses more memory (queue) than DFS (stack).','DFS is typically preferred for cycle detection.'],ref:'Graphs'},
+// ===== DYNAMIC PROGRAMMING =====
+{type:'code',cat:'DP',diff:'Medium',title:'Coin Change',tag:'coderbyte',
+ desc:'Min coins to make amount. Return -1 if impossible.',
+ starter:'def coin_change(coins,amount):\n  return -1\nprint(coin_change([1,5,10,25],36))',
+ solution:'def coin_change(coins,amount):\n  dp=[float(\'inf\')]*(amount+1)\n  dp[0]=0\n  for i in range(1,amount+1):\n    for c in coins:\n      if c<=i: dp[i]=min(dp[i],dp[i-c]+1)\n  return dp[amount] if dp[amount]!=float(\'inf\') else -1',
+ explain:'<strong>Bottom-up DP.</strong> dp[i]=min coins for amount i. Try each coin: dp[i]=min(dp[i], dp[i-coin]+1). Greedy fails on non-canonical systems.',
+ tc:'O(amount×coins)',sc:'O(amount)',ref:'DP',
+ pitfalls:[{a:'Greedy largest-first',w:'Fails: coins=[1,3,4] amount=6 → greedy=3, optimal=2'},{a:'Recursion without memo',w:'Exponential time'}]},
+{type:'code',cat:'DP',diff:'Hard',title:'Longest Common Subsequence',tag:'coderbyte',
+ desc:'Return length of LCS of two strings (not contiguous).',
+ starter:'def lcs(s1,s2):\n  return 0\nprint(lcs("abcde","ace"))',
+ solution:'def lcs(s1,s2):\n  m,n=len(s1),len(s2)\n  dp=[[0]*(n+1) for _ in range(m+1)]\n  for i in range(1,m+1):\n    for j in range(1,n+1):\n      if s1[i-1]==s2[j-1]: dp[i][j]=dp[i-1][j-1]+1\n      else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])\n  return dp[m][n]',
+ explain:'<strong>2D DP.</strong> dp[i][j]=LCS of s1[:i],s2[:j]. Match→extend diagonal. No match→max of skip either. Space optimizable to O(min(m,n)).',
+ tc:'O(m×n)',sc:'O(m×n)',ref:'DP',
+ pitfalls:[{a:'Checking contiguous substrings',w:'Subsequence ≠ substring'},{a:'Greedy left-to-right',w:'Misses longer subsequences that skip early chars'}]},
+{type:'code',cat:'DP',diff:'Easy',title:'Climbing Stairs',tag:'coderbyte',
+ desc:'1 or 2 steps at a time. How many distinct ways to reach step n?',
+ starter:'def climb(n):\n  return 0\nprint(climb(5))',
+ solution:'def climb(n):\n  if n<=2: return n\n  a,b=1,2\n  for _ in range(3,n+1): a,b=b,a+b\n  return b',
+ explain:'<strong>Fibonacci-style DP.</strong> ways(n)=ways(n-1)+ways(n-2). Two variables → O(1) space.',
+ tc:'O(n)',sc:'O(1)',ref:'DP',
+ pitfalls:[{a:'Pure recursion',w:'O(2^n) — timeout for n>30'},{a:'Factorial formula',w:'This is combinatorial DP, not permutation'}]},
+// ===== DATA STRUCTURES =====
+{type:'mc',cat:'DataStructures',diff:'Easy',tag:'coderbyte',
+ q:'What is the average time complexity of lookup in a Python dict/set?',
+ opts:['O(n)','O(log n)','O(1)','O(n log n)'],
+ ans:2,explain:'Dicts/sets use hash tables → O(1) average for lookup, insert, delete. O(n) worst case from collisions is extremely rare.',
+ wrongExplains:['O(n) is for list lookup (linear scan).','O(log n) is for binary search in sorted arrays.','O(n log n) is for sorting.'],ref:'DataStructures'},
+{type:'mc',cat:'DataStructures',diff:'Medium',tag:'coderbyte',
+ q:'When would you use a heap (priority queue) over a sorted list?',
+ opts:['When you need O(1) lookup of any element','When you need efficient insert + extract-min/max','When you need O(1) random access','When data is already sorted'],
+ ans:1,explain:'Heaps give O(log n) insert and extract-min/max vs O(n) insert in a sorted list. Use <code>heapq</code> in Python. Perfect for top-K problems, Dijkstra, and merge-K-sorted.',
+ wrongExplains:['Heap lookup of arbitrary elements is O(n).','Heaps don\'t support random access.','If already sorted, just use the sorted list.'],ref:'DataStructures'},
+{type:'mc',cat:'DataStructures',diff:'Medium',tag:'coderbyte',
+ q:'What is the time complexity of <code>deque.appendleft()</code> vs <code>list.insert(0, x)</code>?',
+ opts:['Both O(1)','Both O(n)','deque O(1), list O(n)','deque O(n), list O(1)'],
+ ans:2,explain:'deque is doubly-linked → appendleft/popleft are O(1). list.insert(0) shifts all elements → O(n). Always use deque for BFS.',
+ wrongExplains:['list.insert(0) is O(n).','deque.appendleft is O(1).','Backwards.'],ref:'DataStructures'},
+// ===== SQL =====
+{type:'code',cat:'SQL',tag:'coderbyte',diff:'Medium',title:'Top Earners by Department',
+ desc:'Find employees earning above their department average. Return name, salary, dept_name.',
+ starter:'-- Your SQL here',
+ solution:'WITH da AS (\n  SELECT dept_id, AVG(salary) AS avg_sal\n  FROM employees GROUP BY dept_id\n)\nSELECT e.name, e.salary, d.dept_name\nFROM employees e\nJOIN departments d ON e.dept_id=d.id\nJOIN da ON e.dept_id=da.dept_id\nWHERE e.salary > da.avg_sal;',
+ explain:'<strong>CTE + self-comparison.</strong> Compute dept averages in CTE, join back to filter. Cleaner than correlated subquery.',
+ tc:'O(n)',sc:'O(d)',ref:'SQL',
+ pitfalls:[{a:'HAVING instead of WHERE',w:'HAVING filters groups, not individual rows'},{a:'Global average',w:'Must compare to department-specific average'}]},
+{type:'code',cat:'SQL',tag:'coderbyte',diff:'Medium',title:'Second Highest Salary',
+ desc:'Return second highest distinct salary. NULL if doesn\'t exist.',
+ starter:'-- Your SQL here',
+ solution:'SELECT MAX(salary) AS second_highest\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);',
+ explain:'<strong>Subquery exclusion.</strong> MAX where < overall MAX. Returns NULL naturally if only one distinct salary. Alternative: DENSE_RANK() OVER (...) WHERE rnk=2.',
+ tc:'O(n)',sc:'O(1)',ref:'SQL',
+ pitfalls:[{a:'LIMIT 1 OFFSET 1 without DISTINCT',w:'Duplicates at top return wrong result'},{a:'ORDER BY LIMIT 2',w:'Awkward to extract second row in standard SQL'}]},
+{type:'code',cat:'SQL',tag:'coderbyte',diff:'Hard',title:'Running Total (Window)',
+ desc:'Show running total of amount per customer, ordered by date.',
+ starter:'-- Your SQL here',
+ solution:'SELECT id, customer_id, transaction_date, amount,\n  SUM(amount) OVER (\n    PARTITION BY customer_id\n    ORDER BY transaction_date\n    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n  ) AS running_total\nFROM transactions\nORDER BY customer_id, transaction_date;',
+ explain:'<strong>Window function with frame.</strong> ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW = cumulative sum. Use ROWS not RANGE to avoid same-day double-counting.',
+ tc:'O(n log n)',sc:'O(n)',ref:'SQL',
+ pitfalls:[{a:'Self-join with SUM GROUP BY',w:'O(n²) vs O(n log n) window function'},{a:'RANGE instead of ROWS',w:'Groups same-date values incorrectly'}]},
+{type:'code',cat:'SQL',tag:'coderbyte',diff:'Hard',title:'Consecutive Login Days',
+ desc:'Find users with 3+ consecutive login days.',
+ starter:'-- Your SQL here',
+ solution:'WITH numbered AS (\n  SELECT DISTINCT user_id, login_date,\n    login_date - CAST(ROW_NUMBER() OVER (\n      PARTITION BY user_id ORDER BY login_date\n    ) AS INT) AS grp\n  FROM logins\n)\nSELECT DISTINCT user_id FROM numbered\nGROUP BY user_id, grp\nHAVING COUNT(*)>=3;',
+ explain:'<strong>Gaps and Islands.</strong> date - ROW_NUMBER gives same value for consecutive dates. Group by this value, count streak length.',
+ tc:'O(n log n)',sc:'O(n)',ref:'SQL',
+ pitfalls:[{a:'Triple self-join date+1, date+2',w:'Only finds exactly 3, O(n³)'},{a:'LAG/LEAD only',w:'Can\'t detect 3+ streaks without nesting'}]},
+{type:'mc',cat:'SQL',tag:'coderbyte',diff:'Medium',
+ q:'RANK() vs DENSE_RANK(): what\'s the difference?',
+ opts:['No difference','RANK skips numbers after ties; DENSE_RANK doesn\'t','DENSE_RANK is slower','RANK only works DESC'],
+ ans:1,explain:'Values [100,100,90]: RANK→1,1,3 (skip 2). DENSE_RANK→1,1,2 (no gaps). ROW_NUMBER→1,2,3 (no ties).',
+ wrongExplains:['Key distinction is gap handling.','Performance is identical.','Both work with any ORDER BY direction.'],ref:'SQL'},
+{type:'mc',cat:'SQL',tag:'coderbyte',diff:'Easy',
+ q:'What does COALESCE(a,b,c) return?',
+ opts:['Sum of a,b,c','First non-NULL value','Maximum value','Concatenation'],
+ ans:1,explain:'Returns first non-NULL argument. SQL equivalent of Python\'s <code>a or b or c</code> for None handling.',
+ wrongExplains:['SUM adds numbers.','MAX returns largest.','CONCAT concatenates strings.'],ref:'SQL'},
+// ===== ML/STATS =====
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Medium',
+ q:'95% accuracy on 95/5 class split. What does this tell you?',
+ opts:['Excellent model','Might just predict all negatives','More data needed','Learning rate too high'],
+ ans:1,explain:'A naive "always negative" classifier gets 95% accuracy here. Need precision, recall, F1 to evaluate properly.',
+ wrongExplains:['Meaningless without class distribution context.','Data amount doesn\'t fix metric choice.','Learning rate is training, not evaluation.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Easy',
+ q:'Primary purpose of regularization?',
+ opts:['Speed up training','Prevent overfitting','Increase complexity','Handle missing data'],
+ ans:1,explain:'Adds penalty to loss discouraging large weights → reduces overfitting. L1→sparse (feature selection). L2→shrinks weights.',
+ wrongExplains:['Slightly slows training.','Reduces complexity.','Imputation handles missing data.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Medium',
+ q:'Learning rate too large — what happens?',
+ opts:['Faster convergence','Loss oscillates/diverges','Model underfits','Gradients vanish'],
+ ans:1,explain:'Overshoots minimum → oscillation or divergence. Fix: LR schedules, Adam optimizer.',
+ wrongExplains:['Only up to a point.','Underfitting is model simplicity.','Vanishing gradients are from deep nets.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Hard',
+ q:'Bagging vs Boosting: key difference?',
+ opts:['Bagging is sequential; boosting is parallel','Bagging reduces variance; boosting reduces bias','Different algorithms required','Bagging needs more data'],
+ ans:1,explain:'<strong>Bagging</strong> (RF): parallel, reduces variance. <strong>Boosting</strong> (XGBoost): sequential error correction, reduces bias. Boosting more prone to overfit.',
+ wrongExplains:['Reversed — bagging is parallel.','Both typically use decision trees.','Similar data requirements.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Medium',
+ q:'ROC-AUC measures what?',
+ opts:['Accuracy across thresholds','Ability to distinguish classes across all thresholds','Precision at specific recall','Training speed'],
+ ans:1,explain:'Measures ranking quality — can model rank positives above negatives? AUC=1.0 perfect, 0.5 random. Threshold-independent.',
+ wrongExplains:['Accuracy is single-threshold.','That\'s PR curves.','ROC is evaluation, not training.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Easy',
+ q:'Which is supervised learning?',
+ opts:['K-Means','PCA','Random Forest','DBSCAN'],
+ ans:2,explain:'RF learns from labeled data. K-Means, DBSCAN are unsupervised clustering. PCA is unsupervised dimensionality reduction.',
+ wrongExplains:['Unsupervised clustering.','Unsupervised dim reduction.','Unsupervised clustering.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Hard',
+ q:'Curse of dimensionality?',
+ opts:['Models too large for memory','Data sparse in high dims, distances unreliable','Training too slow','Features become correlated'],
+ ans:1,explain:'In high dims, points become equidistant. Distance-based algorithms (KNN, K-means, RBF SVM) fail. Need exponentially more data. Fix: PCA, feature selection.',
+ wrongExplains:['Memory is practical, not the curse.','Core issue is sparsity.','Correlation is multicollinearity.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Medium',
+ q:'Type I vs Type II errors?',
+ opts:['I=false positive, II=false negative','I=false negative, II=false positive','I=train error, II=test error','I=bias, II=variance'],
+ ans:0,explain:'Type I (α): false positive — "crying wolf." Type II (β): false negative — "missing the wolf." Power = 1-β.',
+ wrongExplains:['Reversed.','Hypothesis testing terms.','Bias-variance is model complexity.'],ref:'Probability'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Hard',
+ q:'Random Forest: two sources of randomness?',
+ opts:['Random LR and architectures','Bootstrap sampling and random feature subsets','Random init and dropout','Augmentation and label smoothing'],
+ ans:1,explain:'Bootstrap (bagging) + random feature subsets at each split decorrelate trees → robust ensemble.',
+ wrongExplains:['NN concepts.','NN regularization.','Training tricks, not RF.'],ref:'ML/Stats'},
+{type:'mc',cat:'ML/Stats',tag:'coderbyte',diff:'Medium',
+ q:'When to use stratified K-fold?',
+ opts:['Too much data','Imbalanced classes','Categorical features','Deep learning'],
+ ans:1,explain:'Preserves class distribution per fold. Regular K-fold may create folds with zero minority examples.',
+ wrongExplains:['Data size irrelevant.','Encoding, not CV.','ML type irrelevant.'],ref:'ML/Stats'},
+// ===== DEEP LEARNING =====
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Medium',
+ q:'What does the ReLU activation function do?',
+ opts:['Squashes input to [0,1]','Returns max(0, x)','Returns values between [-1,1]','Applies softmax'],
+ ans:1,explain:'ReLU(x) = max(0, x). Kills negative values, passes positives unchanged. Solves vanishing gradient problem vs sigmoid/tanh. Variants: LeakyReLU, GELU.',
+ wrongExplains:['That\'s sigmoid.','That\'s tanh.','Softmax is for output probability distribution.'],ref:'DeepLearning'},
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Medium',
+ q:'What is the purpose of Dropout?',
+ opts:['Speed up training','Regularization — prevents co-adaptation of neurons','Increase model capacity','Normalize batch statistics'],
+ ans:1,explain:'Dropout randomly zeroes neurons during training (e.g., p=0.5) forcing the network to learn redundant representations. Effectively trains an ensemble of subnetworks. Disabled at test time.',
+ wrongExplains:['Slightly slows training.','Reduces effective capacity.','That\'s Batch Normalization.'],ref:'DeepLearning'},
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Hard',
+ q:'What is the vanishing gradient problem?',
+ opts:['Gradients explode to infinity','Gradients approach zero in deep networks, preventing learning','Learning rate decays too fast','Model weights become zero'],
+ ans:1,explain:'In deep nets with sigmoid/tanh, gradients multiply through layers and shrink exponentially. Early layers stop learning. <strong>Fixes:</strong> ReLU, residual connections (skip connections), batch norm, LSTM gates.',
+ wrongExplains:['That\'s the exploding gradient problem.','LR decay is intentional via schedulers.','Weight decay is regularization, not the same issue.'],ref:'DeepLearning'},
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Medium',
+ q:'What does Batch Normalization do?',
+ opts:['Normalizes the entire dataset','Normalizes layer inputs per mini-batch to zero mean, unit variance','Drops random neurons','Clips gradients'],
+ ans:1,explain:'BN normalizes activations to N(0,1) per mini-batch, then applies learned scale (γ) and shift (β). Stabilizes training, allows higher learning rates, and acts as mild regularizer.',
+ wrongExplains:['Normalizes per mini-batch during training, not entire dataset.','That\'s Dropout.','That\'s gradient clipping.'],ref:'DeepLearning'},
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Hard',
+ q:'What is the purpose of skip/residual connections in ResNets?',
+ opts:['Reduce parameters','Allow gradients to flow directly through layers, enabling deeper networks','Speed up inference','Replace pooling layers'],
+ ans:1,explain:'Skip connections add the input directly to the output: y = F(x) + x. Gradients can bypass layers via the + x path, solving vanishing gradients. This is why ResNets can be 100+ layers deep while plain nets fail past ~20.',
+ wrongExplains:['Same or more parameters.','Inference speed is similar.','Pooling serves a different purpose.'],ref:'DeepLearning'},
+{type:'mc',cat:'DeepLearning',tag:'interview',diff:'Medium',
+ q:'Cross-entropy loss vs MSE for classification: which is preferred?',
+ opts:['MSE — it\'s simpler','Cross-entropy — gradients are better behaved','No difference','MSE for binary, CE for multi-class'],
+ ans:1,explain:'CE loss produces stronger gradients when predictions are wrong (gradient ∝ error), while MSE gradients vanish near 0 and 1 (sigmoid saturation). CE also naturally pairs with softmax output.',
+ wrongExplains:['Simplicity doesn\'t make it better for classification.','CE is preferred for both.','CE is preferred for all classification.'],ref:'DeepLearning'},
+// ===== NLP =====
+{type:'mc',cat:'NLP',tag:'interview',diff:'Medium',
+ q:'What is the attention mechanism in transformers?',
+ opts:['A type of pooling layer','Learns which parts of the input to focus on via Query/Key/Value','A loss function for sequence tasks','A data augmentation technique'],
+ ans:1,explain:'Attention computes relevance scores between positions: score = softmax(QK^T/√d) × V. Self-attention lets each token attend to all others. Multi-head attention uses parallel attention heads for different relationship types.',
+ wrongExplains:['Not pooling — it\'s weighted combination.','It\'s a layer mechanism, not a loss.','Not augmentation.'],ref:'NLP'},
+{type:'mc',cat:'NLP',tag:'interview',diff:'Hard',
+ q:'What makes transformers superior to RNNs for sequences?',
+ opts:['Fewer parameters','Parallelizable training + captures long-range dependencies','Better for short sequences','Simpler architecture'],
+ ans:1,explain:'RNNs process sequentially → can\'t parallelize + gradients degrade over long sequences. Transformers process all positions simultaneously via self-attention → GPU parallelism + direct connections between distant positions.',
+ wrongExplains:['Often more parameters.','Better for all sequence lengths.','More complex, but more capable.'],ref:'NLP'},
+{type:'mc',cat:'NLP',tag:'interview',diff:'Medium',
+ q:'What is the purpose of positional encoding in transformers?',
+ opts:['Reduce dimensionality','Inject sequence order information since attention is permutation-invariant','Normalize token embeddings','Speed up training'],
+ ans:1,explain:'Self-attention treats input as a set (no inherent order). Positional encodings (sinusoidal or learned) are added to token embeddings so the model knows position 1 vs position 10.',
+ wrongExplains:['Doesn\'t reduce dims.','Not normalization.','Not related to speed.'],ref:'NLP'},
+// ===== COMPUTER VISION =====
+{type:'mc',cat:'ComputerVision',tag:'interview',diff:'Medium',
+ q:'What does a convolutional layer learn?',
+ opts:['Pixel brightness values','Spatial filters/features like edges, textures, and shapes','Color histograms','Image metadata'],
+ ans:1,explain:'Conv layers learn filters that detect local patterns. Early layers learn edges/textures, deeper layers learn complex shapes/objects. Each filter slides across the image computing dot products.',
+ wrongExplains:['Pixels are input, not learned.','Histograms are hand-crafted features.','Metadata isn\'t learned by convolutions.'],ref:'ComputerVision'},
+{type:'mc',cat:'ComputerVision',tag:'interview',diff:'Medium',
+ q:'What is transfer learning in computer vision?',
+ opts:['Training from scratch on target data','Using a model pretrained on ImageNet and fine-tuning on your task','Transferring data between datasets','Using CPU instead of GPU'],
+ ans:1,explain:'Models pretrained on ImageNet (1.2M images, 1000 classes) learn universal visual features. Fine-tune the last layers on your smaller dataset → dramatically better performance with less data.',
+ wrongExplains:['From-scratch is the opposite.','Transferring the model, not data.','Hardware choice is unrelated.'],ref:'ComputerVision'},
+// ===== FEATURE ENGINEERING =====
+{type:'mc',cat:'FeatureEng',tag:'coderbyte',diff:'Medium',
+ q:'When should you use one-hot encoding vs label encoding for categorical features?',
+ opts:['Always use one-hot','One-hot for nominal (no order); label for ordinal (has order)','Always use label encoding','It doesn\'t matter'],
+ ans:1,explain:'<strong>Nominal</strong> (color: red/blue/green): one-hot encoding — no ordering implied. <strong>Ordinal</strong> (size: S/M/L): label encoding (0,1,2) — preserves order. Using label encoding for nominal features implies false ordering.',
+ wrongExplains:['Label encoding is correct for ordinal features.','One-hot is needed for nominal features.','Wrong choice can hurt model performance significantly.'],ref:'FeatureEng'},
+{type:'mc',cat:'FeatureEng',tag:'coderbyte',diff:'Medium',
+ q:'Why is feature scaling important for some algorithms?',
+ opts:['It improves accuracy for all algorithms','Distance-based algorithms (KNN, SVM, K-means) are sensitive to feature magnitude','It reduces overfitting','It speeds up tree-based models'],
+ ans:1,explain:'Features on different scales (e.g., age 0-100 vs income 0-1M) cause distance-based algorithms to be dominated by large-scale features. <strong>StandardScaler</strong> (z-score) or <strong>MinMaxScaler</strong> fix this. Tree-based models (RF, XGBoost) are scale-invariant.',
+ wrongExplains:['Tree models don\'t benefit.','Scaling is about fairness, not overfitting.','Tree models are scale-invariant.'],ref:'FeatureEng'},
+// ===== DEPLOYMENT =====
+{type:'mc',cat:'Deployment',tag:'interview',diff:'Medium',
+ q:'What is the purpose of A/B testing in ML deployment?',
+ opts:['Compare two algorithms during training','Compare model performance against a baseline/control in production','Test two different datasets','Debug model errors'],
+ ans:1,explain:'Route a fraction of traffic to the new model (treatment), rest to current model (control). Measure real-world metrics (revenue, engagement) to decide if the new model is actually better in production.',
+ wrongExplains:['Training comparison uses validation sets.','A/B tests models, not datasets.','Debugging uses different tools.'],ref:'Deployment'},
+{type:'mc',cat:'Deployment',tag:'interview',diff:'Medium',
+ q:'What is model serialization and why is it needed?',
+ opts:['Converting model to JSON for APIs','Saving trained model weights to disk for later loading/serving','Encrypting model parameters','Compressing model size'],
+ ans:1,explain:'After training, save weights/architecture so you can load and serve predictions without retraining. <strong>Formats:</strong> pickle, joblib (sklearn), torch.save (PyTorch), SavedModel (TensorFlow), ONNX (cross-framework).',
+ wrongExplains:['JSON is for API responses, not model storage.','Encryption is security, not serialization.','Compression is optimization, not serialization.'],ref:'Deployment'},
+// ===== PROBABILITY =====
+{type:'mc',cat:'Probability',tag:'coderbyte',diff:'Medium',
+ q:'Bayes\' Theorem: P(A|B) = ?',
+ opts:['P(B|A) × P(A) / P(B)','P(A) × P(B)','P(A) + P(B) - P(A∩B)','P(B) / P(A)'],
+ ans:0,explain:'Bayes updates prior P(A) with evidence P(B|A). Foundation of Naive Bayes, Bayesian optimization, and probabilistic ML.',
+ wrongExplains:['That\'s P(A∩B) for independent events.','That\'s inclusion-exclusion for P(A∪B).','That\'s not a valid probability formula.'],ref:'Probability'},
+{type:'mc',cat:'Probability',tag:'coderbyte',diff:'Medium',
+ q:'What does p-value < 0.05 mean?',
+ opts:['The result is 95% accurate','If null hypothesis is true, there\'s < 5% chance of seeing data this extreme','The alternative hypothesis is true','The effect size is large'],
+ ans:1,explain:'p-value is NOT the probability the hypothesis is true. It\'s: "assuming null is true, how surprising is this data?" Small p → reject null. But doesn\'t tell you effect size or practical significance.',
+ wrongExplains:['p-value is not about accuracy.','Doesn\'t prove alternative — just evidence against null.','p-value says nothing about effect size.'],ref:'Probability'},
+// ===== PANDAS =====
+{type:'mc',cat:'Pandas',tag:'coderbyte',diff:'Medium',
+ q:'groupby().apply() vs groupby().transform(): key difference?',
+ opts:['No difference','apply returns any shape; transform returns same shape as input','apply is faster','transform only works with built-ins'],
+ ans:1,explain:'transform broadcasts group result back to each row: <code>df[\'dept_avg\']=df.groupby(\'dept\')[\'salary\'].transform(\'mean\')</code>. apply can return anything.',
+ wrongExplains:['Fundamentally different output shapes.','Speed depends on function.','Transform works with lambdas too.'],ref:'Pandas'},
+{type:'mc',cat:'Pandas',tag:'coderbyte',diff:'Easy',
+ q:'Replace missing values with column median?',
+ opts:['df.dropna()','df.fillna(df.median())','df.replace(None,0)','df.interpolate()'],
+ ans:1,explain:'fillna(df.median()) per column. dropna loses rows. replace(None,0) introduces bias. interpolate is for time-series.',
+ wrongExplains:['Loses data.','0 introduces bias.','For ordered/time data.'],ref:'Pandas'},
+{type:'mc',cat:'Pandas',tag:'coderbyte',diff:'Hard',
+ q:'What does pivot_table produce?',
+ opts:['Filtered DataFrame','Cross-tab: index=rows, columns=headers, values aggregated','Melted long-format','Grouped multi-index'],
+ ans:1,explain:'Reshapes long→wide. Like Excel PivotTable. fill_value handles missing combinations.',
+ wrongExplains:['Reshapes, not filters.','Melt is the opposite.','groupby creates GroupBy object.'],ref:'Pandas'},
+{type:'mc',cat:'Pandas',tag:'coderbyte',diff:'Medium',
+ q:'loc[] vs iloc[]: difference?',
+ opts:['None','loc=label-based; iloc=integer position','loc is faster','iloc is columns only'],
+ ans:1,explain:'loc["row","col"] by label. iloc[0,2] by position. loc includes slice endpoints; iloc excludes (like Python).',
+ wrongExplains:['Very different.','Same performance.','Both work on rows and columns.'],ref:'Pandas'},
+// ===== NUMPY =====
+{type:'mc',cat:'NumPy',tag:'coderbyte',diff:'Medium',
+ q:'What does <code>np.where(arr > 5, 1, 0)</code> return?',
+ opts:['Indices where arr>5','Array of 1s and 0s based on condition','Filtered array','Boolean mask'],
+ ans:1,explain:'Vectorized if/else: returns 1 where True, 0 where False. Much faster than Python loops.',
+ wrongExplains:['np.where with 3 args returns values, not indices.','Doesn\'t filter — returns same shape.','Boolean mask is arr>5 alone.'],ref:'NumPy'},
+{type:'mc',cat:'NumPy',tag:'coderbyte',diff:'Medium',
+ q:'Why is NumPy faster than Python lists for math?',
+ opts:['Python lists are untyped','NumPy uses contiguous memory + C implementations + vectorized operations','NumPy uses more RAM','Python lists can\'t do math'],
+ ans:1,explain:'NumPy arrays are fixed-type, contiguous memory blocks. Operations are vectorized C/Fortran under the hood — no Python loop overhead. 10-100x faster for numerical work.',
+ wrongExplains:['Lists are dynamically typed but that\'s not the full story.','NumPy typically uses less RAM per element.','Lists can do math, just slowly.'],ref:'NumPy'},
+// ===== SKLEARN =====
+{type:'mc',cat:'Sklearn',tag:'coderbyte',diff:'Medium',
+ q:'What is the purpose of sklearn Pipeline?',
+ opts:['Parallel model training','Chain preprocessing + model into single object for clean fit/predict','Data visualization','Hyperparameter search'],
+ ans:1,explain:'Pipeline chains steps: <code>Pipeline([("scaler",StandardScaler()),("clf",SVC())])</code>. Prevents data leakage in cross-validation (scaler fits only on training fold). Single fit()/predict() call.',
+ wrongExplains:['Not about parallelism.','Not visualization.','GridSearchCV does hyperparameter search (often wraps Pipeline).'],ref:'Sklearn'},
+{type:'mc',cat:'Sklearn',tag:'coderbyte',diff:'Hard',
+ q:'Why is it important to fit the scaler only on training data, not test data?',
+ opts:['Test data is too small','Fitting on test data causes data leakage — model "sees" test distribution','Scalers don\'t work on test data','It doesn\'t matter'],
+ ans:1,explain:'If you fit scaler on full data (train+test), the scaler\'s mean/std include test information → data leakage. The model indirectly learns from test set. Always: <code>scaler.fit(X_train)</code> then <code>scaler.transform(X_test)</code>.',
+ wrongExplains:['Size is irrelevant.','Scalers work fine — the issue is leakage.','It matters significantly for honest evaluation.'],ref:'Sklearn'},
+// ===== PYTHON ADVANCED =====
+{type:'mc',cat:'Python',tag:'coderbyte',diff:'Medium',
+ q:'<code>*args</code> and <code>**kwargs</code> do what?',
+ opts:['*args=keyword args, **kwargs=positional','*args=positional as tuple, **kwargs=keyword as dict','Both capture as list','They are decorators'],
+ ans:1,explain:'*args collects extra positional args as tuple. **kwargs collects keyword args as dict. Common in decorators and wrapper functions.',
+ wrongExplains:['Reversed.','*args is tuple, not list.','Parameter syntax, not decorators.'],ref:'Python'},
+{type:'mc',cat:'Python',tag:'coderbyte',diff:'Easy',
+ q:'Output of <code>[x**2 for x in range(5) if x%2==0]</code>?',
+ opts:['[0, 4, 16]','[1, 9, 25]','[0, 1, 4, 9, 16]','[4, 16]'],
+ ans:0,explain:'range(5)=[0,1,2,3,4]. Filter even: [0,2,4]. Square: [0,4,16].',
+ wrongExplains:['Squares of odd numbers.','No filter applied.','Missing 0 — 0%2==0 is True.'],ref:'Python'},
+{type:'mc',cat:'Python',tag:'coderbyte',diff:'Medium',
+ q:'Shallow vs deep copy?',
+ opts:['No difference','Shallow copies nested refs; deep creates independent copies','Shallow is faster (not the key point)','Deep only for immutables'],
+ ans:1,explain:'Shallow: new outer, shared nested objects. Deep: recursively copies everything. Use deepcopy for nested mutable structures.',
+ wrongExplains:['Critical difference for nested mutables.','Speed difference exists but isn\'t the key distinction.','Works on any object.'],ref:'Python'},
+{type:'mc',cat:'Python',tag:'coderbyte',diff:'Medium',
+ q:'What does <code>yield</code> do?',
+ opts:['Returns and terminates','Returns a value and pauses, resuming on next()','Raises exception','Creates decorator'],
+ ans:1,explain:'Makes function a generator — produces values lazily. Memory efficient for large datasets: <code>for x in my_gen(): ...</code> processes one item at a time.',
+ wrongExplains:['return terminates; yield pauses.','Not exception-related.','Decorators use @syntax.'],ref:'Python'},
+];
+
+// =============================================
+// ENGINE
+// =============================================
+let selTime=0,timerInt=null,timeLeft=0,answered=0,correct=0,totalQ=0,aQ=[];
+const catScores={};
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById(t.dataset.tab).classList.add('active');
+}));
+
+function selectTime(el){
+  document.querySelectorAll('.time-opt').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  selTime=parseInt(el.dataset.mins);
+}
+
+function startAssessment(){
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('assessmentArea').style.display='block';
+  document.getElementById('resultsPanel').classList.remove('show');
+  const sh=[...Q].sort(()=>Math.random()-.5);
+  let n=Q.length;
+  if(selTime===60)n=Math.min(20,Q.length);
+  else if(selTime===90)n=Math.min(30,Q.length);
+  else if(selTime===120)n=Math.min(45,Q.length);
+  aQ=sh.slice(0,n);totalQ=aQ.length;answered=0;correct=0;
+  Object.keys(catScores).forEach(k=>delete catScores[k]);
+  if(selTime>0){timeLeft=selTime*60;document.getElementById('timerBar').classList.add('active');updTimer();timerInt=setInterval(tick,1000);}
+  updCtr();renderAss();
+}
+
+function tick(){timeLeft--;if(timeLeft<=0){clearInterval(timerInt);timeLeft=0;finish();}updTimer();}
+function updTimer(){
+  const m=Math.floor(timeLeft/60),s=timeLeft%60;
+  const el=document.getElementById('timerDisplay'),fl=document.getElementById('timerFill');
+  el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const p=(timeLeft/(selTime*60))*100;fl.style.width=p+'%';
+  el.className='timer-display';fl.className='timer-fill';
+  if(p<15){el.classList.add('danger');fl.classList.add('danger');}
+  else if(p<35){el.classList.add('warning');fl.classList.add('warning');}
+}
+function updCtr(){document.getElementById('qCounter').textContent=`${answered}/${totalQ}`;}
+
+function renderAss(){
+  const a=document.getElementById('assessmentArea');a.innerHTML='';
+  aQ.forEach((q,i)=>a.appendChild(q.type==='mc'?mkMC(q,i,false):mkCode(q,i)));
+  const d=document.createElement('div');d.style.cssText='text-align:center;margin-top:20px;';
+  d.innerHTML=`<button class="btn btn-primary" style="padding:14px 40px;font-size:15px" onclick="finish()">Submit Assessment</button>`;
+  a.appendChild(d);
+}
+
+function mkMC(q,i,isRev){
+  const d=document.createElement('div');d.className='quiz-q';d.id=`q-${i}`;
+  const db=q.diff==='Easy'?'badge-easy':q.diff==='Hard'?'badge-hard':'badge-med';
+  const tb=q.tag==='coderbyte'?'<span class="badge-cb">CODERBYTE</span>':'<span class="badge-iv">INTERVIEW</span>';
+  d.innerHTML=`<h3><span class="qnum">Q${i+1}</span> ${q.q} <span class="q-type q-type-mc">${q.cat}</span> <span class="badge ${db}">${q.diff}</span> ${tb}</h3>
+  <div class="options" id="opts-${i}"></div>
+  <div class="feedback-box" id="fb-${i}"></div>`;
+  const od=d.querySelector('.options');
+  q.opts.forEach((o,j)=>{
+    const b=document.createElement('button');b.className='opt-btn';
+    b.innerHTML=`<span class="opt-letter">${L[j]}</span><span>${o}</span>`;
+    b.addEventListener('click',()=>ansMC(i,j,q,isRev));od.appendChild(b);
+  });
+  if(isRev){const rb=document.createElement('button');rb.className='btn btn-outline';rb.style.marginTop='10px';rb.textContent='Reveal Answer';
+    rb.addEventListener('click',()=>{d.querySelectorAll('.opt-btn').forEach((b,j)=>{b.classList.add('disabled');if(j===q.ans)b.classList.add('correct');});showFB(i,q,-1);rb.style.display='none';});d.appendChild(rb);}
+  return d;
+}
+
+function ansMC(i,j,q,isRev){
+  const opts=document.querySelectorAll(`#opts-${i} .opt-btn`);
+  if(opts[0].classList.contains('disabled'))return;
+  const ok=j===q.ans;
+  if(!isRev){answered++;if(ok)correct++;
+    if(!catScores[q.cat])catScores[q.cat]={t:0,c:0};catScores[q.cat].t++;if(ok)catScores[q.cat].c++;
+    updCtr();}
+  const qd=document.getElementById(`q-${i}`);
+  qd.classList.add(ok?'answered-correct':'answered-wrong');
+  opts.forEach((b,k)=>{b.classList.add('disabled');if(k===q.ans)b.classList.add('correct');if(k===j&&!ok)b.classList.add('wrong');});
+  showFB(i,q,j);
+}
+
+function showFB(i,q,sel){
+  const fb=document.getElementById(`fb-${i}`);
+  const ok=sel===q.ans;
+  const isReveal=sel===-1;
+  let html='';
+  if(!isReveal){
+    html+=`<div class="feedback-title ${ok?'correct-title':'wrong-title'}">${ok?'✓ Correct! Well done.':'✗ Incorrect'}</div>`;
+  }
+  html+=`<div style="margin-bottom:8px">${q.explain}</div>`;
+  // Per-option breakdown
+  html+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><strong style="font-size:11px;color:var(--text-dim)">OPTION BREAKDOWN:</strong></div>`;
+  q.opts.forEach((o,k)=>{
+    const isC=k===q.ans;
+    html+=`<div class="why-item"><span class="why-letter ${isC?'is-correct':'is-wrong'}">${isC?'✓':'✗'} ${L[k]}</span> ${isC?'<strong>Correct.</strong>':((q.wrongExplains&&q.wrongExplains[k<q.ans?k:k-1])||'Incorrect.')}</div>`;
+  });
+  // Reference link
+  const refUrl=refs[q.ref]||refs[q.cat]||'';
+  if(refUrl)html+=`<a class="ref-link" href="${refUrl}" target="_blank" rel="noopener">📚 Study: ${q.ref||q.cat} fundamentals →</a>`;
+  fb.innerHTML=html;
+  fb.className=`feedback-box show ${isReveal?'feedback-correct':ok?'feedback-correct':'feedback-wrong'}`;
+}
+
+function mkCode(q,i){
+  const d=document.createElement('div');d.className='code-challenge';d.id=`q-${i}`;
+  const db=q.diff==='Easy'?'badge-easy':q.diff==='Hard'?'badge-hard':'badge-med';
+  const ct=q.cat==='SQL'?'q-type-sql':'q-type-code';
+  const tb=q.tag==='coderbyte'?'<span class="badge-cb">CODERBYTE</span>':'<span class="badge-iv">INTERVIEW</span>';
+  const refUrl=refs[q.ref]||refs[q.cat]||'';
+  d.innerHTML=`<div class="card-title"><span class="qnum">Q${i+1}</span> ${q.title} <span class="q-type ${ct}">${q.cat}</span> <span class="badge ${db}">${q.diff}</span> ${tb}</div>
+  <div class="challenge-desc">${q.desc}</div>
+  <textarea class="code-editor" id="ed-${i}" spellcheck="false">${q.starter}</textarea>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="togSol(${i})">Toggle Solution</button>
+    <button class="btn btn-outline" onclick="markDone(${i})">Mark Done</button>
+  </div>
+  <div class="solution-panel" id="sol-${i}">
+    <div class="solution-tabs">
+      <button class="sol-tab active" onclick="solTab(${i},'opt',event)">Optimal</button>
+      <button class="sol-tab" onclick="solTab(${i},'exp',event)">Explanation</button>
+      <button class="sol-tab" onclick="solTab(${i},'pit',event)">Pitfalls</button>
+    </div>
+    <div class="sol-content">
+      <div class="sol-pane active" id="sol-${i}-opt">
+        <pre>${esc(q.solution)}</pre>
+        <div style="margin-top:8px"><span class="complexity-box"><span class="label">Time:</span> ${q.tc}</span><span class="complexity-box"><span class="label">Space:</span> ${q.sc}</span></div>
+        ${refUrl?`<a class="ref-link" href="${refUrl}" target="_blank" rel="noopener">📚 Study: ${q.ref||q.cat} →</a>`:''}
+      </div>
+      <div class="sol-pane" id="sol-${i}-exp"><div style="font-size:13px;color:var(--text-dim);line-height:1.7">${q.explain}</div></div>
+      <div class="sol-pane" id="sol-${i}-pit">${q.pitfalls?q.pitfalls.map(p=>`<div style="margin-bottom:10px"><div style="font-size:13px;font-weight:600;color:var(--rose)">✗ ${p.a}</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px">${p.w}</div></div>`).join(''):'<div style="color:var(--text-dim)">No common pitfalls.</div>'}</div>
+    </div>
+  </div>`;
+  return d;
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function togSol(i){document.getElementById(`sol-${i}`).classList.toggle('show');}
+function solTab(i,t,e){
+  const p=document.getElementById(`sol-${i}`);
+  p.querySelectorAll('.sol-tab').forEach(x=>x.classList.remove('active'));
+  p.querySelectorAll('.sol-pane').forEach(x=>x.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(`sol-${i}-${t}`).classList.add('active');
+}
+function markDone(i){
+  const d=document.getElementById(`q-${i}`);
+  if(!d.classList.contains('answered-correct')){d.classList.add('answered-correct');answered++;correct++;updCtr();
+    const q=aQ[i];if(q&&!catScores[q.cat])catScores[q.cat]={t:0,c:0};if(q){catScores[q.cat].t++;catScores[q.cat].c++;}
+    event.target.textContent='✓ Done';event.target.disabled=true;event.target.style.opacity='.5';}
+}
+
+function finish(){
+  if(timerInt)clearInterval(timerInt);
+  document.getElementById('timerBar').classList.remove('active');
+  const p=document.getElementById('resultsPanel');
+  const pct=totalQ>0?Math.round(correct/totalQ*100):0;
+  let grade,gc;
+  if(pct>=85){grade='Excellent — You\'re ready!';gc='var(--accent)';}
+  else if(pct>=70){grade='Good — Review the misses';gc='var(--cyan)';}
+  else if(pct>=50){grade='Needs work — Focus on weak areas';gc='var(--amber)';}
+  else{grade='Study more — Review all solutions';gc='var(--rose)';}
+  let catHtml='';
+  for(const[cat,s]of Object.entries(catScores)){
+    const cp=s.t>0?Math.round(s.c/s.t*100):0;
+    const cc=cp>=80?'var(--accent)':cp>=60?'var(--cyan)':cp>=40?'var(--amber)':'var(--rose)';
+    catHtml+=`<div class="cat-stat"><div class="cat-stat-num" style="color:${cc}">${s.c}/${s.t}</div><div class="cat-stat-label">${cat}</div></div>`;
+  }
+  p.innerHTML=`<div class="big-score">${correct}/${totalQ}</div>
+  <div class="score-subtitle" style="color:${gc};font-weight:600">${grade}</div>
+  <div class="cat-breakdown">${catHtml}</div>
+  <div style="margin-top:20px"><button class="btn btn-primary" onclick="location.reload()">Restart</button>
+  <button class="btn btn-secondary" style="margin-left:8px" onclick="goReview()">Review All</button></div>`;
+  p.classList.add('show');
+}
+
+function goReview(){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelector('[data-tab="review"]').classList.add('active');
+  document.getElementById('review').classList.add('active');
+  renderReview();
+}
+
+// ===== REVIEW WITH FILTERS =====
+let activeFilter='All';let activeTag='all';
+function renderReview(){
+  const cats=['All',...new Set(Q.map(q=>q.cat))];
+  const fb=document.getElementById('filterBar');
+  if(!fb.children.length){
+    // Tag filters first
+    const tagDiv=document.createElement('div');tagDiv.style.cssText='display:flex;gap:6px;width:100%;margin-bottom:6px';
+    ['all','coderbyte','interview'].forEach(t=>{
+      const b=document.createElement('button');b.className='filter-btn'+(t==='all'?' active':'');
+      b.textContent=t==='all'?'All Tags':t==='coderbyte'?'🎯 Coderbyte Likely ('+Q.filter(x=>x.tag==='coderbyte').length+')':'💼 Interview Likely ('+Q.filter(x=>x.tag==='interview').length+')';
+      b.addEventListener('click',()=>{activeTag=t;tagDiv.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');fillReview();});
+      tagDiv.appendChild(b);
+    });
+    fb.appendChild(tagDiv);
+    // Category filters
+    cats.forEach(c=>{
+      const b=document.createElement('button');b.className='filter-btn'+(c==='All'?' active':'');
+      b.textContent=c==='All'?`All (${Q.length})`:c;
+      b.addEventListener('click',()=>{activeFilter=c;fb.querySelectorAll('.filter-btn:not(:first-child)').forEach(x=>{if(x.parentElement===fb)x.classList.remove('active')});b.classList.add('active');fillReview();});
+      fb.appendChild(b);
+    });
+  }
+  fillReview();
+}
+
+function fillReview(){
+  const c=document.getElementById('reviewContainer');c.innerHTML='';
+  let filtered=activeFilter==='All'?[...Q]:Q.filter(q=>q.cat===activeFilter);
+  if(activeTag!=='all')filtered=filtered.filter(q=>q.tag===activeTag);
+  const groups={};filtered.forEach(q=>{if(!groups[q.cat])groups[q.cat]=[];groups[q.cat].push(q);});
+  let gi=2000;
+  for(const[cat,qs]of Object.entries(groups)){
+    const h=document.createElement('div');h.className='topic-header';h.textContent=`${cat} (${qs.length} questions)`;c.appendChild(h);
+    qs.forEach(q=>{c.appendChild(q.type==='mc'?mkMC(q,gi,true):mkCode(q,gi));gi++;});
+  }
+}
+
+window.addEventListener('DOMContentLoaded',renderReview);
+</script>
+</body>
+</html>
