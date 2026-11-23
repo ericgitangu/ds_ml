@@ -7,7 +7,7 @@
 ### Supervised - Regression
 
 | Algorithm | When to Use | Pros | Cons |
-|-----------|------------|------|------|
+| ----------- | ------------ | ------ | ------ |
 | **Linear Regression** | Linear relationship, interpretability needed | Fast, interpretable, no tuning | Assumes linearity, sensitive to outliers |
 | **Ridge / Lasso** | Linear + regularization needed | Handles multicollinearity (Ridge), feature selection (Lasso L1 drives coefficients to 0) | Still assumes linearity |
 | **XGBoost / Gradient Boosting** | Tabular data, competitions, max performance | Handles nonlinearity, missing values, feature importance built-in | Slower to train, can overfit, less interpretable |
@@ -15,7 +15,7 @@
 ### Supervised - Classification
 
 | Algorithm | When to Use | Pros | Cons |
-|-----------|------------|------|------|
+| ----------- | ------------ | ------ | ------ |
 | **Logistic Regression** | Binary/multi classification, interpretable baseline | Fast, probabilistic output, good baseline | Linear decision boundary |
 | **Decision Tree** | Interpretability, non-linear boundaries | No scaling needed, handles mixed types, visual | Overfits easily, unstable (high variance) |
 | **Random Forest** | General-purpose, reduce DT variance | Robust, parallel training, handles high-dim | Slow prediction, less interpretable than single tree |
@@ -27,13 +27,14 @@
 ### Unsupervised
 
 | Algorithm | When to Use | Pros | Cons |
-|-----------|------------|------|------|
+| ----------- | ------------ | ------ | ------ |
 | **K-Means** | Clustering when k is known, spherical clusters | Fast, simple, scalable | Must specify k, assumes spherical clusters, sensitive to initialization |
 | **DBSCAN** | Arbitrary-shape clusters, outlier detection | No need to specify k, finds outliers | Struggles with varying densities, sensitive to eps/min_samples |
 | **PCA** | Dimensionality reduction, visualization, noise reduction | Reduces features, removes multicollinearity | Linear only, components hard to interpret |
 
 ### Key Decision Framework
-```
+
+```yaml
 Tabular data, max performance  -->  XGBoost / LightGBM
 Need interpretability          -->  Logistic Regression / Decision Tree
 Small dataset                  -->  SVM, KNN, Naive Bayes
@@ -50,16 +51,17 @@ Reduce dimensions              -->  PCA, t-SNE (viz only)
 ### Classification Metrics
 
 | Metric | Formula | When to Use |
-|--------|---------|------------|
+| -------- | --------- | ------------ |
 | **Accuracy** | (TP+TN) / Total | Balanced classes only |
 | **Precision** | TP / (TP+FP) | Cost of false positives is high (spam filter) |
 | **Recall (Sensitivity)** | TP / (TP+FN) | Cost of false negatives is high (cancer detection) |
-| **F1 Score** | 2 * (P*R) / (P+R) | Imbalanced classes, balance P and R |
+| **F1 Score** | 2 *(P*R) / (P+R) | Imbalanced classes, balance P and R |
 | **AUC-ROC** | Area under TPR vs FPR curve | Compare models, threshold-independent evaluation |
 | **Log Loss** | -mean(y*log(p) + (1-y)*log(1-p)) | When you care about calibrated probabilities |
 
 **Confusion Matrix Layout:**
-```
+
+```yaml
                  Predicted
               Pos      Neg
 Actual Pos  [ TP  |   FN ]
@@ -69,7 +71,7 @@ Actual Neg  [ FP  |   TN ]
 ### Regression Metrics
 
 | Metric | Formula | Notes |
-|--------|---------|-------|
+| -------- | --------- | ------- |
 | **RMSE** | sqrt(mean((y-y_hat)^2)) | Penalizes large errors more, same units as target |
 | **MAE** | mean(abs(y-y_hat)) | Robust to outliers, same units as target |
 | **R-squared** | 1 - SS_res/SS_tot | Proportion of variance explained, 0-1 (can be negative) |
@@ -93,7 +95,7 @@ tscv = TimeSeriesSplit(n_splits=5)
 
 ### Bias-Variance Tradeoff
 
-```
+```yaml
 Total Error = Bias^2 + Variance + Irreducible Error
 
 High Bias (Underfitting)          High Variance (Overfitting)
@@ -333,8 +335,9 @@ DELETE FROM t WHERE id NOT IN (SELECT MIN(id) FROM t GROUP BY unique_cols);
 
 ### Architectures
 
-**CNN (Convolutional Neural Networks) - Image data**
-```
+#### CNN (Convolutional Neural Networks) - Image data**
+
+```yaml
 Input -> [Conv -> ReLU -> Pool] x N -> Flatten -> FC -> Output
 
 Conv layer:  Learns spatial filters (edges, textures, shapes)
@@ -343,16 +346,18 @@ Key params:  kernel_size, stride, padding, num_filters
 Output size: (W - K + 2P) / S + 1
 ```
 
-**RNN / LSTM - Sequential data (time series, text)**
-```
+#### RNN / LSTM - Sequential data (time series, text)**
+
+```yaml
 RNN problem:  Vanishing/exploding gradients on long sequences
 LSTM solves:  Gates (forget, input, output) control information flow
 GRU:          Simplified LSTM (2 gates instead of 3), often similar performance
 Bidirectional: Process sequence both forward and backward
 ```
 
-**Transformers - Modern NLP, increasingly everything**
-```
+#### Transformers - Modern NLP, increasingly everything
+
+```yaml
 Key innovation:  Self-attention (no sequential processing -> parallelizable)
 Attention:       Q, K, V matrices; Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) V
 Multi-head:      Multiple attention heads capture different relationships
@@ -366,7 +371,7 @@ Encoder-Decoder: T5, original Transformer (translation)
 ### Activation Functions
 
 | Function | Formula | Use Case | Notes |
-|----------|---------|----------|-------|
+| ---------- | --------- | ---------- | ------- |
 | **ReLU** | max(0, x) | Hidden layers (default) | Fast, sparse, dying ReLU problem |
 | **Leaky ReLU** | max(0.01x, x) | Fix dying ReLU | Small negative slope |
 | **Sigmoid** | 1/(1+e^-x) | Binary output layer | Vanishing gradient, output (0,1) |
@@ -376,7 +381,7 @@ Encoder-Decoder: T5, original Transformer (translation)
 
 ### Optimizers
 
-```
+```yaml
 SGD:           Simple, needs good LR. Add momentum for faster convergence.
 Adam:          Adaptive LR per parameter (default choice). Combines momentum + RMSprop.
 AdamW:         Adam + decoupled weight decay (preferred for transformers).
@@ -385,7 +390,7 @@ Learning rate: Too high -> diverge. Too low -> slow. Use schedulers (cosine, war
 
 ### Regularization
 
-```
+```yaml
 Dropout:       Randomly zero out neurons during training (p=0.1-0.5). Reduces co-adaptation.
 Batch Norm:    Normalize activations per mini-batch. Speeds training, slight regularization.
                Applied BEFORE activation (Conv -> BN -> ReLU).
@@ -396,7 +401,8 @@ Data Aug:      Random crops, flips, rotations (images). Mixup, cutout.
 ```
 
 ### Key Hyperparameters
-```
+
+```yaml
 Learning rate:   Most important. Start with 3e-4 (Adam), 1e-2 (SGD with momentum).
 Batch size:      Larger = faster but may generalize worse. 32-256 typical.
 Architecture:    Depth vs width tradeoff. Deeper = more abstract features.
@@ -408,7 +414,7 @@ Architecture:    Depth vs width tradeoff. Deeper = more abstract features.
 
 ### Hypothesis Testing Framework
 
-```
+```yaml
 1. State hypotheses:  H0 (null: no effect)  vs  H1 (alternative: there is an effect)
 2. Choose significance level:  alpha = 0.05 (typically)
 3. Compute test statistic and p-value
@@ -424,7 +430,7 @@ Architecture:    Depth vs width tradeoff. Deeper = more abstract features.
 ### Common Tests
 
 | Scenario | Test |
-|----------|------|
+| ---------- | ------ |
 | Compare 2 means (normal, known var) | Z-test |
 | Compare 2 means (normal, unknown var) | t-test (independent or paired) |
 | Compare >2 means | ANOVA (one-way, two-way) |
@@ -435,7 +441,7 @@ Architecture:    Depth vs width tradeoff. Deeper = more abstract features.
 
 ### Confidence Intervals
 
-```
+```yaml
 CI = point_estimate +/- z * standard_error
 
 95% CI with z=1.96:   x_bar +/- 1.96 * (s / sqrt(n))
@@ -447,7 +453,7 @@ It does NOT mean 95% probability the parameter is in this interval.
 
 ### A/B Testing
 
-```
+```yaml
 1. Define metric (conversion rate, revenue, etc.)
 2. Calculate required sample size BEFORE the test:
    - Effect size (minimum detectable effect, e.g., 2% lift)
@@ -468,7 +474,7 @@ Common pitfalls:
 
 ### Key Distributions
 
-```
+```yaml
 Normal:      Continuous, symmetric. Central Limit Theorem: sample means are normal.
 Bernoulli:   Single binary trial (coin flip). P(X=1) = p.
 Binomial:    n independent Bernoulli trials. P(X=k) = C(n,k) * p^k * (1-p)^(n-k).
@@ -485,7 +491,7 @@ Bayes' Theorem: P(A|B) = P(B|A) * P(A) / P(B)
 
 ### End-to-End ML System Architecture
 
-```
+```yaml
 Data Sources -> Ingestion -> Feature Store -> Training Pipeline -> Model Registry
                                   |                                     |
                                   v                                     v
@@ -495,7 +501,8 @@ Data Sources -> Ingestion -> Feature Store -> Training Pipeline -> Model Registr
 ```
 
 ### Feature Store
-```
+
+```yaml
 Purpose:      Single source of truth for features. Prevents training/serving skew.
 Offline store: Historical features for training (data warehouse, S3/Parquet).
 Online store:  Low-latency features for serving (Redis, DynamoDB).
@@ -505,7 +512,7 @@ Tools:         Feast (open source), Tecton, SageMaker Feature Store.
 
 ### Model Serving
 
-```
+```yaml
 Batch prediction:   Run periodically, store results. Simple, high throughput.
                     Use when: latency tolerance is high, predictions can be precomputed.
 
@@ -527,7 +534,7 @@ Optimization:
 
 ### Training Pipeline
 
-```
+```yaml
 Components:
 1. Data validation   - Schema checks, distribution drift detection (Great Expectations)
 2. Preprocessing     - Feature transforms, consistent with serving
@@ -541,7 +548,7 @@ Orchestration: Airflow, Kubeflow Pipelines, Prefect
 
 ### Monitoring & Drift
 
-```
+```yaml
 Data drift:     Input distribution changes (feature distributions shift).
                 Detect: KS test, PSI (Population Stability Index), JS divergence.
 
@@ -567,7 +574,7 @@ Response:
 
 ### Common Interview Design Questions
 
-```
+```yaml
 Q: "Design a recommendation system"
    -> Collaborative filtering vs content-based vs hybrid
    -> Candidate generation (ANN) -> Ranking (ML model) -> Re-ranking (business rules)
